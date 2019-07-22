@@ -1,8 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from .mixins import BasicUserFieldsMixin
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
 
-# Create your models here.
-class User(BasicUserFieldsMixin, PermissionsMixin, AbstractBaseUser):
-    """This Class is going to represent a 'user' in our system or any where it is being used. """
+from .mixins import BasicUserFieldMixin
+
+
+class User(BasicUserFieldMixin, AbstractBaseUser, PermissionsMixin):
+    """Represents a user in our system"""
     pass
