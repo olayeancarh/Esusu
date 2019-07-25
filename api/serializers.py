@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers, exceptions
 from django.utils.translation import ugettext_lazy as _
+from .models import SavingsGroup, UsersSavingsGroup
 
 User = get_user_model()
 
@@ -14,7 +15,6 @@ class UserSerializer(serializers.ModelSerializer):
 
         def create(self, validated_data):
             """Creates and return a new user"""
-
             user = User(
                 email=validated_data['email'], 
                 telephone=validated_data['telephone'], 
@@ -57,3 +57,15 @@ class LoginSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+
+class SavingsGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavingsGroup
+        fields = ('name', 'owner', 'members',)
+
+
+class UsersSavingsGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UsersSavingsGroup
+        fields = ('user', 'savings_group',)
