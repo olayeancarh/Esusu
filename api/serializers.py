@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model, authenticate
 from rest_framework import serializers, exceptions
 from django.utils.translation import ugettext_lazy as _
+from .models import SavingsGroup, UsersSavingsGroup
 
 User = get_user_model()
 
@@ -57,3 +58,19 @@ class LoginSerializer(serializers.Serializer):
 
         attrs['user'] = user
         return attrs
+
+    
+class SavingsGroupSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
+    members = UserSerializer()
+    class Meta:
+        model = SavingsGroup
+        fields = ['name', 'owner', 'members', 'date_created']
+
+    
+class UsersSavingsGroupSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    savings_group = SavingsGroupSerializer()
+    class Meta:
+        model = UsersSavingsGroup
+        fields = ['user', 'savings_group', 'members', 'date_joined']
