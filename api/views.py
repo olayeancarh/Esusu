@@ -6,8 +6,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 from django.contrib.auth import get_user_model, login, logout
 from django.utils.timezone import now
-from .serializers import UserSerializer, LoginSerializer
+from .permissions import IsCreationOrIsAuthenticated
+from .serializers import UserSerializer, LoginSerializer, SavingsGroupSerializer, UsersSavingsGroupSerializer
 from .authentication import ExpiringTokenAuthentication
+from .models import SavingsGroup, UsersSavingsGroup
 
 # Create your views here.
 User = get_user_model()
@@ -18,7 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     authentication_classes = (ExpiringTokenAuthentication,)
     filter_backends = (filters.SearchFilter,)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsCreationOrIsAuthenticated,)
     search_fields = ('first_name', 'last_name', 'email')
 
 
@@ -51,3 +53,12 @@ class LogoutViewSet(viewsets.ViewSet):
     def create(self, request):
         logout(request)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SavingsGroupViewSet(viewsets.ModelViewSet):
+    queryset = SavingsGroup.objects.all()
+    serializer_class = SavingsGroupSerializer
+    authentication_classes = (ExpiringTokenAuthentication,)
+    filter_backends = (filters.SearchFilter,)
+    permission_classes = (IsAuthenticatedOrReadOnly,)
+    search_fields = ('first_name', 'last_name', 'email')

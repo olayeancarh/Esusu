@@ -58,14 +58,18 @@ class LoginSerializer(serializers.Serializer):
         attrs['user'] = user
         return attrs
 
-
+    
 class SavingsGroupSerializer(serializers.ModelSerializer):
+    owner = UserSerializer()
+    members = UserSerializer()
     class Meta:
         model = SavingsGroup
-        fields = ('name', 'owner', 'members',)
+        fields = ('name', 'owner', 'members', 'date_created',)
 
-
+    
 class UsersSavingsGroupSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    savings_group = SavingsGroupSerializer()
     class Meta:
         model = UsersSavingsGroup
-        fields = ('user', 'savings_group',)
+        fields = ('user', 'savings_group', 'members', 'date_joined',)
