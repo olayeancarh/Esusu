@@ -27,5 +27,10 @@ class UsersSavingsGroup(models.Model):
     balance = models.DecimalField(verbose_name=_('savings balance'), max_digits=9, decimal_places=3, default=0.000)
     date_joined = models.DateTimeField(verbose_name=_('date joined'), default=timezone.now, editable=False)
 
+    class Meta:
+        unique_together = ('user', 'savings_group',)
+
     def __str__(self):
-        return self.savings_group.name
+        return f'{self.user.first_name}_{self.savings_group.name}'
+
+    

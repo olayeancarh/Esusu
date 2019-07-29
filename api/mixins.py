@@ -49,7 +49,7 @@ class UserManager(BaseUserManager):
 class NameUserMethodsMixin:
     def get_full_name(self):
         """Used to get full name of the user"""
-        return "%s %s" % (self.first_name, self.last_name)
+        return f'{self.first_name} {self.last_name}'
 
     def get_short_name(self):
         """Used to get short name of the user, firstname is retured here"""
