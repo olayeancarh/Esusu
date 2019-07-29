@@ -41,10 +41,10 @@ class LoginViewSet(viewsets.ViewSet):
             token.created = now()
             token.save()
 
-        userObj = UserSerializer(user).data 
+        user_obj = UserSerializer(user).data 
         
         return Response({
-            "status": status.HTTP_200_OK, "user": userObj, "access_token": f'Token {token}',
+            "status": status.HTTP_200_OK, "user": user_obj, "access_token": f'Token {token}',
         })
 
 
@@ -59,6 +59,23 @@ class SavingsGroupViewSet(viewsets.ModelViewSet):
     queryset = SavingsGroup.objects.all()
     serializer_class = SavingsGroupSerializer
     authentication_classes = (ExpiringTokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
-    permission_classes = (IsAuthenticatedOrReadOnly,)
-    search_fields = ('first_name', 'last_name', 'email')
+    search_fields = ('name',)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        savings_grp_obj = serializer.save() 
+        if(savings_grp_obj):
+            user_id = savings_grp_obj.owner
+            savings_grp_id = savings_grp_obj.id
+            savings_grp_obj.userssavingsgroup_set.create(user=user_id,savings_group=savings_grp_id)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+class UserSavingsGroupViewSet(viewsets.ModelViewSet):
+    queryset = UsersSavingsGroup.objects.all()
+    serializer_class = UsersSavingsGroupSerializer
+    authentication_classes = (ExpiringTokenAuthentication,)
+    # permission_classes = (IsAuthenticated,)

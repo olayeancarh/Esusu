@@ -13,20 +13,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ('id', 'first_name', 'last_name', 'email', 'telephone', 'password')
         extra_kwargs = {'password': {'write_only': True}}
 
-        def create(self, validated_data):
-            """Creates and return a new user"""
-            user = User(
-                email=validated_data['email'], 
-                telephone=validated_data['telephone'], 
-                first_name=validated_data['first_name'], 
-                last_name=validated_data['last_name'],
-                )
+    def create(self, validated_data):
+        """Creates and return a new user"""
+        user = User(
+            email=validated_data['email'], 
+            telephone=validated_data['telephone'], 
+            first_name=validated_data['first_name'], 
+            last_name=validated_data['last_name'],
+            )
 
-            user.set_password(validated_data['password'])
+        user.set_password(validated_data['password'])
 
-            user.save()
+        user.save()
 
-            return user
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
@@ -44,7 +44,6 @@ class LoginSerializer(serializers.Serializer):
         if email and password:
             user = authenticate(request=self.context.get('request'),
                                 email=email, password=password)
-
             # The authenticate call simply returns None for is_active=False
             # users. (Assuming the default ModelBackend authentication
             # backend.)
@@ -60,16 +59,27 @@ class LoginSerializer(serializers.Serializer):
 
     
 class SavingsGroupSerializer(serializers.ModelSerializer):
-    owner = UserSerializer()
-    members = UserSerializer()
+    def __init__(self, instance=None, **kwargs):
+        if instance:
+            setattr(self.Meta, 'depth', 1)
+        else:
+            setattr(self.Meta, 'depth', 0)
+        super(SavingsGroupSerializer, self).__init__(instance, **kwargs)
+    
     class Meta:
         model = SavingsGroup
-        fields = ('name', 'owner', 'members', 'date_created',)
+        fields = ('id', 'name', 'owner', 'members', 'date_created',)
+        depth = 0
 
     
 class UsersSavingsGroupSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    savings_group = SavingsGroupSerializer()
+    def __init__(self, instance=None, **kwargs):
+        if instance:
+            setattr(self.Meta, 'depth', 1)
+        else:
+            setattr(self.Meta, 'depth', 0)
+        super(UsersSavingsGroupSerializer, self).__init__(instance, **kwargs)
     class Meta:
         model = UsersSavingsGroup
-        fields = ('user', 'savings_group', 'members', 'date_joined',)
+        fields = ('id', 'user', 'savings_group', 'balance', 'date_joined',)
+        depth = 0
