@@ -59,7 +59,7 @@ class SavingsGroupViewSet(viewsets.ModelViewSet):
     queryset = SavingsGroup.objects.all()
     serializer_class = SavingsGroupSerializer
     authentication_classes = (ExpiringTokenAuthentication,)
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
@@ -74,8 +74,14 @@ class SavingsGroupViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
+    
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = UsersSavingsGroupSerializer(instance.userssavingsgroup_set.all(), many=True)
+        return Response(serializer.data)
+
 class UserSavingsGroupViewSet(viewsets.ModelViewSet):
     queryset = UsersSavingsGroup.objects.all()
     serializer_class = UsersSavingsGroupSerializer
     authentication_classes = (ExpiringTokenAuthentication,)
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
