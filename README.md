@@ -50,27 +50,27 @@ A simple digital platform that helps to save fixed amount of contribution based 
   ```shell
   $ python -m venv ./venv
   ```
-  - Activate virtual env
+- Activate virtual env
   > run the command below
   ```shell
   $ source ./venv/Scripts/activate
   ```
-  - Install packages used
+- Install packages used
   > run the command below
   ```shell
   $ pip install -r requirements.txt
   ```
-  - Makemigrations and migrate database
+- Makemigrations and migrate database
   > run the command below
   ```shell
   $ python manage.py migrate
   ```
-  - Create a super user
+- Create a super user
   > run the command below
   ```shell
   $ python manage.py createsuperuser
   ```
-  - Run server
+- Run server
   > run the command below
   ```shell
   $ python manage.py runserver
