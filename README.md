@@ -1,7 +1,4 @@
-# Esusu
-A simple digital platform that helps to save fixed amount of contribution based on a selected frequency.
-
-# Banka  &middot;
+# Esusu  &middot;
 
 > Esusu Confam is a simple platform that helps people save a fixed amount automatically every week and a member collects the money at the end of every month...
 
