@@ -73,8 +73,9 @@
   $ python manage.py runserver
   ```
   
-- Use `localhost:8000` as base url for endpoints on local machine
-- Use `https://adcbanka.herokuapp.com` as base url for endpoints
+- Use `localhost:8000` as base url for endpoints on local machine.
+- Use `http://djenv.a7yutf227m.us-west-2.elasticbeanstalk.com` as base url for endpoints on live.
+- NOTE: Token is required for all activities other than registration and login. Token is gotten after log in.
 
 #### Endpoints
 
